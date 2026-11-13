@@ -69,6 +69,28 @@ export default function ManageBooks() {
     );
   }, [books, search]);
 
+  const handleStatusChange = async (book, nextStatus) => {
+  if (!nextStatus || nextStatus === book.status) return;
+
+  try {
+    const response = await api.put(
+      `/api/admin/books/${book.id}/status`,
+      { status: nextStatus }
+    );
+
+    setBooks((prev) =>
+      prev.map((item) =>
+        item.id === book.id ? response.data : item
+      )
+    );
+
+    alert("Book status updated successfully!");
+  } catch (error) {
+    console.error(error);
+    alert("Failed to update book status!");
+  }
+};
+
   const handleDelete = async (book) => {
     const confirmed = window.confirm(
       `Are you sure you want to delete "${book.title}"?`
@@ -256,19 +278,49 @@ export default function ManageBooks() {
                       <td className="px-6 py-5 text-sm text-gray-300">
                         ₹{book.price}
                       </td>
-                      <td className="px-6 py-5">
-                        <span
-                          className={`px-3 py-1.5 rounded-full text-xs font-medium ${
-                            book.status === "AVAILABLE"
-                              ? "bg-green-500/10 text-green-400"
-                              : "bg-red-500/10 text-red-400"
-                          }`}
-                        >
-                          {book.status === "AVAILABLE"
-                            ? "Available"
-                            : "Not Available"}
-                        </span>
-                      </td>
+                     
+<td className="px-6 py-5">
+  <div className="relative w-40">
+    <select
+      value={book.status}
+      onChange={(e) =>
+        handleStatusChange(book, e.target.value)
+      }
+      className={`w-full appearance-none cursor-pointer rounded-full
+        border px-4 py-2 pr-9 text-xs font-semibold
+        outline-none transition-all duration-200
+        focus:ring-2 focus:ring-orange-400/30
+        ${
+          book.status === "AVAILABLE"
+            ? "border-green-500/20 bg-green-500/10 text-green-400 hover:bg-green-500/15"
+            : "border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/15"
+        }`}
+    >
+      <option value="AVAILABLE" className="bg-[#1c191b] text-green-400">
+        Available
+      </option>
+      <option value="NOT_AVAILABLE" className="bg-[#1c191b] text-red-400">
+        Not Available
+      </option>
+    </select>
+
+    <svg
+      className="pointer-events-none absolute right-3 top-1/2
+        h-3.5 w-3.5 -translate-y-1/2 opacity-70"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="m19 9-7 7-7-7"
+      />
+    </svg>
+  </div>
+</td>
+
                       <td className="px-6 py-5 text-right">
                         <button
                           onClick={() => handleDelete(book)}
