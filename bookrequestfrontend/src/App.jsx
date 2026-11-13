@@ -1,122 +1,75 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  Navigate
+} from "react-router-dom";
+import { ArrowLeft, Construction } from "lucide-react";
 
+import Home from "./pages/Home";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
+import ManageBooks from "./pages/ManageBooks";
+import AddBook from "./pages/AddBook";
+import AdminRequests from "./pages/AdminRequests";
+import EmployeeBooks from "./pages/EmployeeBooks";
+function ComingSoon({ title }) {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#161316] px-6 text-center text-white">
+      <div className="mb-6 rounded-2xl bg-[#ff6d29]/15 p-5 text-[#ff8a55]">
+        <Construction size={38} />
+      </div>
 
-      <div className="ticks"></div>
+      <h1 className="text-3xl font-bold">{title}</h1>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      <p className="mt-3 text-[#bababa]">
+        We're building this workspace. Stay tuned!
+      </p>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <Link
+        to="/"
+        className="mt-8 flex items-center gap-2 rounded-xl bg-[#ff6d29] px-6 py-3 font-semibold text-[#161316]"
+      >
+        <ArrowLeft size={18} />
+        Back to Home
+      </Link>
+    </div>
+  );
 }
 
-export default App
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+
+        <Route path="/admin/login" element={<AdminLogin />} />
+
+        
+<Route path="/admin/dashboard" element={<AdminDashboard />} />
+<Route path="/admin/manage-books" element={<ManageBooks />} />
+<Route path="/admin/add-book" element={<AddBook />} />
+<Route
+  path="/admin/requests"
+  element={<AdminRequests />}
+/>
+<Route
+  path="/employee/books"
+  element={<EmployeeBooks />}
+/>
+        <Route
+  path="/employee/dashboard"
+  element={<Navigate to="/employee/books" replace />}
+/>
+
+        <Route
+          path="*"
+          element={<ComingSoon title="Page Not Found" />}
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
