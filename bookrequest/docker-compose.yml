@@ -1,0 +1,40 @@
+
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: book-request-mysql
+    restart: always
+
+    environment:
+      MYSQL_ROOT_PASSWORD: sSshsrsustsis
+      MYSQL_DATABASE: book_request_system
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: .
+    container_name: book-request-backend
+    restart: always
+
+    ports:
+      - "8080:8080"
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/book_request_system
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: sSshsrsustsis
+
+volumes:
+  mysql_data:
